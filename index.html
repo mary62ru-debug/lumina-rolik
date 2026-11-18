@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Процесс создания рекламного видеоролика для сервиса Lumina AI — от идеи до финального монтажа">
+  <title>Как я создавала ролик для Lumina AI | Behind the Scenes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&display=swap" rel="stylesheet">
+  <style>
+    /* ========== ПЕРЕМЕННЫЕ ========== */
+    :root{
+      --amber-1:#F5B041;
+      --amber-2:#E67E22;
+      --amber-3:#FDE3A7;
+      --dark-1:#0A0A14;
+      --dark-2:#1A1A2E;
+      --dark-3:#16213E;
+      --white:#FFFFFF;
+      --white-soft:rgba(255,255,255,.92);
+      --white-muted:rgba(255,255,255,.68);
+      --white-dim:rgba(255,255,255,.45);
+      --border:rgba(255,255,255,.08);
+      --border-strong:rgba(255,255,255,.16);
+      --glass:rgba(255,255,255,.04);
+      --glass-strong:rgba(255,255,255,.07);
+      --radius:20px;
+      --radius-lg:32px;
+      --shadow-amber:0 20px 60px rgba(245,176,65,.3);
+      --container:1280px;
+      --pad:clamp(20px,4vw,40px);
+      --section-pad:clamp(80px,12vw,140px);
+      --ease:cubic-bezier(.2,.7,.2,1);
+    }
+
+    /* ========== СБРОС ========== */
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+    body{
+      font-family:'Inter',system-ui,-apple-system,sans-serif;
+      background:var(--dark-1);
+      color:var(--white-soft);
+      line-height:1.6;
+      overflow-x:hidden;
+      -webkit-font-smoothing:antialiased;
+      background-image:
+        radial-gradient(1200px 600px at 80% -10%,rgba(245,176,65,.08),transparent 60%),
+        radial-gradient(900px 500px at -10% 30%,rgba(230,126,34,.06),transparent 60%);
+    }
+    img,video{display:block;max-width:100%;height:auto}
+    a{color:inherit;text-decoration:none}
+    button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+    /* ========== ТИПОГРАФИКА ========== */
+    h1,h2,h3,h4{font-family:'Playfair Display',Georgia,serif;font-weight:700;color:var(--white);letter-spacing:-.01em;line-height:1.15}
+    h1{font-size:clamp(2.4rem,5vw,4rem)}
+    h2{font-size:clamp(2rem,4vw,3rem);margin-bottom:.4em}
+    h3{font-size:clamp(1.3rem,2vw,1.6rem)}
+    h4{font-size:1.1rem}
+    .eyebrow{
+      display:inline-block;
+      font-family:'Inter',sans-serif;
+      font-size:.78rem;font-weight:600;
+      letter-spacing:.22em;text-transform:uppercase;
+      color:var(--amber-1);
+      padding:.5em 1.2em;
+      border:1px solid rgba(245,176,65,.3);
+      border-radius:999px;
+      background:rgba(245,176,65,.06);
+      margin-bottom:1.4em;
+    }
+    .lead{font-size:clamp(1.05rem,1.4vw,1.2rem);color:var(--white-muted);max-width:64ch}
+    .gradient-text{
+      background:linear-gradient(120deg,#F5B041 0%,#FDE3A7 50%,#E67E22 100%);
+      -webkit-background-clip:text;background-clip:text;
+      -webkit-text-fill-color:transparent;color:transparent;
+    }
+
+    /* ========== LAYOUT ========== */
+    .container{max-width:var(--container);margin:0 auto;padding:0 var(--pad)}
+    section{padding:var(--section-pad) 0;position:relative}
+    .section-head{text-align:center;max-width:820px;margin:0 auto clamp(40px,6vw,72px)}
+    .section-head .lead{margin:0 auto}
+
+    /* ========== НАВИГАЦИЯ ========== */
+    .nav{
+      position:fixed;top:0;left:0;right:0;z-index:50;
+      backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+      background:rgba(10,10,20,.6);
+      border-bottom:1px solid var(--border);
+      transition:background .3s var(--ease);
+    }
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px var(--pad);max-width:var(--container);margin:0 auto}
+    .logo{display:flex;align-items:center;gap:12px;font-family:'Playfair Display',serif;font-weight:700;font-size:1.35rem;color:var(--white)}
+    .logo-mark{
+      width:38px;height:38px;border-radius:10px;
+      background:linear-gradient(135deg,var(--amber-1),var(--amber-2));
+      display:grid;place-items:center;
+      box-shadow:0 6px 20px rgba(245,176,65,.4);
+    }
+    .logo-mark svg{width:22px;height:22px;color:var(--dark-1)}
+    .nav-links{display:none;gap:30px}
+    .nav-links a{font-size:.92rem;color:var(--white-muted);transition:color .2s}
+    .nav-links a:hover{color:var(--amber-1)}
+    @media(min-width:900px){.nav-links{display:flex}}
+
+    /* ========== HERO ========== */
+    .hero{
+      min-height:100vh;
+      display:flex;align-items:center;justify-content:center;
+      padding:120px var(--pad) 80px;
+      position:relative;overflow:hidden;
+      isolation:isolate;
+    }
+    .hero-bg{position:absolute;inset:0;z-index:-1;overflow:hidden}
+    .hero-bg::before{
+      content:"";position:absolute;inset:-20%;
+      background:
+        radial-gradient(600px 400px at 20% 30%,rgba(245,176,65,.25),transparent 60%),
+        radial-gradient(700px 500px at 80% 70%,rgba(230,126,34,.2),transparent 60%);
+      filter:blur(40px);
+      animation:drift 22s ease-in-out infinite alternate;
+    }
+    .hero-bg::after{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(180deg,transparent 0%,rgba(10,10,20,.4) 60%,var(--dark-1) 100%);
+    }
+    @keyframes drift{
+      0%{transform:translate(0,0) scale(1)}
+      100%{transform:translate(3%,-2%) scale(1.08)}
+    }
+    .orb{
+      position:absolute;border-radius:50%;
+      filter:blur(60px);opacity:.55;
+      animation:float 14s ease-in-out infinite;
+    }
+    .orb-1{width:340px;height:340px;background:var(--amber-1);top:10%;left:-5%}
+    .orb-2{width:260px;height:260px;background:var(--amber-2);bottom:10%;right:-3%;animation-delay:-5s}
+    .orb-3{width:200px;height:200px;background:#FDE3A7;top:50%;left:40%;animation-delay:-9s;opacity:.3}
+    @keyframes float{
+      0%,100%{transform:translate(0,0)}
+      33%{transform:translate(30px,-40px)}
+      66%{transform:translate(-20px,30px)}
+    }
+    .hero-inner{
+      position:relative;text-align:center;
+      max-width:960px;z-index:1;
+      display:flex;flex-direction:column;align-items:center;
+    }
+    .hero h1{margin-bottom:.3em}
+    .hero h1 .accent{display:block;margin-top:.1em}
+    .hero-sub{font-size:clamp(1.1rem,1.6vw,1.3rem);color:var(--white-muted);max-width:62ch;margin:0 auto 2.4em}
+
+    /* ========== КАРТОЧКИ ========== */
+    .card{
+      background:linear-gradient(180deg,var(--glass-strong),var(--glass));
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:clamp(24px,3vw,36px);
+      backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+      transition:transform .3s var(--ease),border-color .3s var(--ease),box-shadow .3s var(--ease);
+      position:relative;overflow:hidden;
+    }
+    .card::before{
+      content:"";position:absolute;inset:0;border-radius:inherit;
+      background:linear-gradient(135deg,rgba(245,176,65,.08),transparent 50%);
+      opacity:0;transition:opacity .3s var(--ease);pointer-events:none;
+    }
+    .card:hover{transform:translateY(-4px);border-color:rgba(245,176,65,.3);box-shadow:var(--shadow-amber)}
+    .card:hover::before{opacity:1}
+
+    /* ========== ВИДЕО СЕКЦИЯ ========== */
+    .video-showcase{
+      max-width:1200px;margin:0 auto;
+      border-radius:var(--radius-lg);
+      overflow:hidden;
+      border:1px solid var(--border-strong);
+      box-shadow:0 40px 100px rgba(0,0,0,.6);
+      position:relative;
+      background:var(--dark-2);
+    }
+    .video-showcase video{
+      width:100%;height:auto;
+      display:block;
+    }
+    .video-caption{
+      padding:clamp(24px,4vw,40px);
+      background:linear-gradient(180deg,var(--glass-strong),var(--glass));
+      border-top:1px solid var(--border);
+    }
+    .video-caption h3{margin-bottom:.4em}
+    .video-caption p{color:var(--white-muted);font-size:1rem}
+
+    /* ========== ПРОЦЕСС (TIMELINE) ========== */
+    .timeline{
+      position:relative;
+      max-width:900px;margin:0 auto;
+      padding-left:40px;
+    }
+    .timeline::before{
+      content:"";position:absolute;left:20px;top:0;bottom:0;width:2px;
+      background:linear-gradient(180deg,var(--amber-1),transparent);
+    }
+    .tl-item{
+      position:relative;
+      margin-bottom:48px;
+    }
+    .tl-item:last-child{margin-bottom:0}
+    .tl-dot{
+      position:absolute;left:-28px;top:8px;
+      width:18px;height:18px;border-radius:50%;
+      background:linear-gradient(135deg,var(--amber-1),var(--amber-2));
+      border:3px solid var(--dark-1);
+      box-shadow:0 0 0 3px rgba(245,176,65,.25);
+    }
+    .tl-step{
+      display:inline-block;
+      padding:4px 12px;border-radius:999px;
+      background:rgba(245,176,65,.1);
+      border:1px solid rgba(245,176,65,.3);
+      color:var(--amber-1);
+      font-size:.75rem;font-weight:700;
+      letter-spacing:.1em;text-transform:uppercase;
+      margin-bottom:12px;
+    }
+    .tl-item h3{margin-bottom:.6em;font-size:1.3rem}
+    .tl-item p{color:var(--white-muted);margin-bottom:16px;font-size:1rem}
+    .tl-note{
+      background:rgba(245,176,65,.06);
+      border-left:3px solid var(--amber-1);
+      padding:14px 18px;
+      border-radius:8px;
+      font-size:.92rem;
+      color:var(--white-muted);
+      margin-top:12px;
+    }
+    .tl-note b{color:var(--amber-1)}
+
+    /* ========== ПРОМПТЫ ========== */
+    .prompt-card{
+      background:var(--dark-2);
+      border:1px solid var(--border-strong);
+      border-radius:var(--radius);
+      padding:28px;
+      margin-bottom:24px;
+      position:relative;
+    }
+    .prompt-card::before{
+      content:"";position:absolute;top:0;left:0;right:0;height:3px;
+      background:linear-gradient(90deg,var(--amber-1),var(--amber-2));
+      border-radius:var(--radius) var(--radius) 0 0;
+    }
+    .prompt-header{
+      display:flex;align-items:center;gap:12px;
+      margin-bottom:16px;
+    }
+    .prompt-number{
+      width:36px;height:36px;border-radius:10px;
+      background:linear-gradient(135deg,var(--amber-1),var(--amber-2));
+      display:grid;place-items:center;
+      font-family:'Playfair Display',serif;
+      font-weight:700;font-size:1.1rem;
+      color:var(--dark-1);
+      flex-shrink:0;
+    }
+    .prompt-title{
+      font-family:'Inter',sans-serif;
+      font-size:1.1rem;font-weight:700;
+      color:var(--white);
+    }
+    .prompt-duration{
+      margin-left:auto;
+      padding:4px 12px;border-radius:999px;
+      background:rgba(245,176,65,.1);
+      border:1px solid rgba(245,176,65,.3);
+      color:var(--amber-1);
+      font-size:.78rem;font-weight:600;
+    }
+    .prompt-text{
+      font-family:'Inter',sans-serif;
+      font-size:.95rem;
+      color:var(--white-muted);
+      line-height:1.7;
+      padding:16px;
+      background:rgba(0,0,0,.3);
+      border-radius:10px;
+      border:1px solid var(--border);
+    }
+    .prompt-text code{
+      font-family:'Inter',monospace;
+      color:var(--amber-3);
+      background:rgba(245,176,65,.1);
+      padding:2px 6px;
+      border-radius:4px;
+      font-size:.88rem;
+    }
+
+    /* ========== ЗАМЕТКИ ========== */
+    .notes-grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:24px;
+      max-width:900px;margin:0 auto;
+    }
+    @media(min-width:768px){
+      .notes-grid{grid-template-columns:1fr 1fr}
+    }
+    .note-card{
+      background:var(--glass);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:28px;
+      transition:transform .3s var(--ease),border-color .3s var(--ease);
+    }
+    .note-card:hover{transform:translateY(-4px);border-color:rgba(245,176,65,.3)}
+    .note-icon{
+      width:48px;height:48px;border-radius:12px;
+      background:linear-gradient(135deg,rgba(245,176,65,.18),rgba(230,126,34,.08));
+      border:1px solid rgba(245,176,65,.25);
+      display:grid;place-items:center;
+      margin-bottom:16px;
+      color:var(--amber-1);
+    }
+    .note-icon svg{width:24px;height:24px}
+    .note-card h4{margin-bottom:.6em;font-size:1.1rem}
+    .note-card p{color:var(--white-muted);font-size:.95rem}
+
+    /* ========== ВЫВОДЫ ========== */
+    .conclusions{
+      background:linear-gradient(135deg,rgba(245,176,65,.08),var(--glass));
+      border:1px solid rgba(245,176,65,.25);
+      border-radius:var(--radius-lg);
+      padding:clamp(32px,5vw,56px);
+      max-width:900px;margin:0 auto;
+    }
+    .conclusions h3{margin-bottom:24px;text-align:center}
+    .conclusions-list{
+      display:flex;flex-direction:column;gap:16px;
+    }
+    .conclusions-list li{
+      display:flex;gap:14px;align-items:flex-start;
+      color:var(--white-muted);font-size:1rem;
+    }
+    .conclusions-list li svg{
+      flex-shrink:0;width:22px;height:22px;margin-top:2px;
+      color:var(--amber-1);
+    }
+    .conclusions-list li b{color:var(--white);font-weight:600;display:block;margin-bottom:2px}
+
+    /* ========== FOOTER ========== */
+    footer{
+      border-top:1px solid var(--border);
+      padding:40px var(--pad) 24px;
+      background:var(--dark-1);
+    }
+    .footer-bottom{
+      max-width:var(--container);margin:0 auto;
+      display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;
+      font-size:.82rem;color:var(--white-dim);
+    }
+
+    /* ========== АНИМАЦИИ ========== */
+    .reveal{opacity:0;transform:translateY(28px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+    .reveal.in{opacity:1;transform:none}
+    .reveal-delay-1{transition-delay:.1s}
+    .reveal-delay-2{transition-delay:.2s}
+    .reveal-delay-3{transition-delay:.3s}
+
+    @media(max-width:640px){
+      .timeline{padding-left:30px}
+      .timeline::before{left:15px}
+      .tl-dot{left:-23px;width:16px;height:16px}
+    }
+
+    @media(prefers-reduced-motion:reduce){
+      *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ========== НАВИГАЦИЯ ========== -->
+<header class="nav" role="banner">
+  <div class="nav-inner">
+    <a href="#top" class="logo" aria-label="Lumina AI — на главную">
+      <span class="logo-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="4"/></svg>
+      </span>
+      Lumina AI
+    </a>
+    <nav class="nav-links" aria-label="Основная навигация">
+      <a href="#video">Видео</a>
+      <a href="#process">Процесс</a>
+      <a href="#prompts">Промпты</a>
+      <a href="#notes">Заметки</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ========== HERO ========== -->
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-bg" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="hero-inner">
+    <span class="eyebrow reveal">Behind the Scenes</span>
+    <h1 id="hero-title" class="reveal reveal-delay-1">
+      Как я создавала
+      <span class="accent gradient-text">рекламный ролик</span>
+      <span class="accent">для Lumina AI</span>
+    </h1>
+    <p class="hero-sub reveal reveal-delay-2">Полный процесс работы: от идеи и промптов до финального монтажа. Все шаги, инструменты и использованные промпты.</p>
+  </div>
+</section>
+
+<!-- ========== ФИНАЛЬНОЕ ВИДЕО ========== -->
+<section id="video" aria-labelledby="video-title">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Финальный результат</span>
+      <h2 id="video-title">Рекламный ролик <span class="gradient-text">Lumina AI</span></h2>
+      <p class="lead">9-секундный видеоролик, рассказывающий историю девушки, которая мечтает о профессиональной фотосессии, но находит решение в сервисе Lumina AI.</p>
+    </div>
+
+    <div class="video-showcase reveal">
+      <video controls autoplay muted loop playsinline>
+        <source src="video1.mp4" type="video/mp4">
+        Ваш браузер не поддерживает видео.
+      </video>
+      <div class="video-caption">
+        <h3>Сюжет ролика</h3>
+        <p>Девушка в повседневной одежде идёт по вечерней улице, останавливается у окна фотостудии и видит, как фотограф снимает богатую женщину в элегантном платье. У неё нет денег на такую фотосессию. Придя домой, она вспоминает о сервисе Lumina AI, загружает своё селфи и мгновенно получает профессиональные фотографии в том же стиле. Девушка счастлива.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== ПРОЦЕСС СОЗДАНИЯ ========== -->
+<section id="process" aria-labelledby="process-title">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Процесс создания</span>
+      <h2 id="process-title">7 шагов от идеи <span class="gradient-text">до финального ролика</span></h2>
+      <p class="lead">Каждый этап работы: генерация промптов, создание изображений, анимация и монтаж.</p>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <span class="tl-step">Шаг 1</span>
+        <h3>Создание основного промпта</h3>
+        <p>Написала детальный промпт для генерации 9-секундного видеоролика. Описала все 4 сцены: девушка у окна фотостудии, грусть дома, использование Lumina AI, радость от результата.</p>
+        <div class="tl-note">
+          <b>Инструмент:</b> Qwen AI для написания промпта
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <span class="tl-step">Шаг 2</span>
+        <h3>Проблема с дизайном сервиса</h3>
+        <p>Поняла, что нужно сделать так, чтобы интерфейс Lumina AI в ролике соответствовал разработанному ранее дизайну: тёмный фон, золотые акценты, логотип с диафрагмой.</p>
+        <div class="tl-note">
+          <b>Решение:</b> Использовать Image Guidance в Leonardo AI
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <span class="tl-step">Шаг 3</span>
+        <h3>Image Guidance в Leonardo AI</h3>
+        <p>Узнала, что в Leonardo AI можно загрузить скриншот интерфейса Lumina AI и указать в промпте, чтобы визуал сервиса брался с приложенного изображения.</p>
+        <div class="tl-note">
+          <b>Функция:</b> Image Guidance (Image Prompt) с параметром Image Strength 0.5
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <span class="tl-step">Шаг 4</span>
+        <h3>Первая генерация видео</h3>
+        <p>Вставила готовый промпт из Qwen в Leonardo AI, подгрузила скриншот визуала сервиса и нажала генерировать. Но токенов оставалось только 86, поэтому смогла сделать только короткое 5-секундное видео.</p>
+        <div class="tl-note">
+          <b>Проблема:</b> Нехватка токенов для полной генерации
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <span class="tl-step">Шаг 5</span>
+        <h3>Разбивка на 4 кадра</h3>
+        <p>Вернулась в Qwen и попросила разбить промпт на 4 отдельных кадра по 2-3 секунды каждый. Получила 4 самостоятельных промпта для генерации.</p>
+        <div class="tl-note">
+          <b>Результат:</b> 4 промпта для 4 сцен ролика
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <span class="tl-step">Шаг 6</span>
+        <h3>Генерация в ChatGPT</h3>
+        <p>Отправила все промпты себе на почту, открыла в ChatGPT с телефона (там есть VPN). ChatGPT создал 4 картинки и 4 гифки из них.</p>
+        <div class="tl-note">
+          <b>Инструмент:</b> ChatGPT (DALL-E 3) на телефоне
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <span class="tl-step">Шаг 7</span>
+        <h3>Монтаж в CapCut</h3>
+        <p>Загрузила все гифки в CapCut на телефоне, смонтировала в один ролик. Первый вариант понравился больше всего, поэтому его прикрепила как финальный результат.</p>
+        <div class="tl-note">
+          <b>Инструмент:</b> CapCut (мобильная версия)
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== ПРОМПТЫ ========== -->
+<section id="prompts" aria-labelledby="prompts-title">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Использованные промпты</span>
+      <h2 id="prompts-title">4 промпта для <span class="gradient-text">4 сцен ролика</span></h2>
+      <p class="lead">Все промпты, которые использовались для генерации изображений и анимации кадров.</p>
+    </div>
+
+    <div class="prompt-card reveal">
+      <div class="prompt-header">
+        <div class="prompt-number">1</div>
+        <div class="prompt-title">Мечта за окном</div>
+        <div class="prompt-duration">3 секунды</div>
+      </div>
+      <div class="prompt-text">
+        <code>Cinematic photography, evening city street with warm amber streetlights and blurred bokeh. A young Russian woman with chestnut brown hair in a messy bun, wearing a simple cream knit sweater and jeans, stands on the sidewalk looking up at a large illuminated photo studio window on the second floor of an elegant building. Through the glass window we see inside: a male photographer with an expensive professional camera on a tripod, studio softbox lights, and a wealthy elegant woman in a luxurious milk-colored satin evening dress posing against draped fabric backdrop with soft golden studio lighting. The young woman outside has a wistful, longing expression, one hand slightly raised. She opens her small wallet — it's empty. She sighs disappointedly. Warm golden glow from the studio window falls on her face, contrasting with cool blue evening shadows. Wet pavement reflects city lights. Shallow depth of field, 8k photorealistic, shot on 50mm lens, f/1.8, volumetric lighting, cinematic atmosphere. NO TEXT, NO LETTERS.</code>
+      </div>
+    </div>
+
+    <div class="prompt-card reveal">
+      <div class="prompt-header">
+        <div class="prompt-number">2</div>
+        <div class="prompt-title">Грусть и озарение</div>
+        <div class="prompt-duration">2 секунды</div>
+      </div>
+      <div class="prompt-text">
+        <code>Cinematic photography, cozy home interior in the evening. The same young Russian woman with chestnut brown hair in a messy bun, wearing a cream knit sweater, sits on a light beige sofa looking sad and tired. Shopping bags on the floor near the entrance. Warm home lighting, fairy lights bokeh in the background, soft shadows. Her expression is melancholic, eyes slightly downcast. But in her eyes there's a subtle spark — she's remembering something. She smiles with hope. Shallow depth of field, 8k photorealistic, warm amber tones, intimate atmosphere. NO TEXT.</code>
+      </div>
+    </div>
+
+    <div class="prompt-card reveal">
+      <div class="prompt-header">
+        <div class="prompt-number">3</div>
+        <div class="prompt-title">Магия Lumina AI</div>
+        <div class="prompt-duration">3 секунды</div>
+      </div>
+      <div class="prompt-text">
+        <code>Cinematic photography, cozy home interior evening. The same young Russian woman with chestnut brown hair in a messy bun, cream sweater, sits on a sofa with a laptop on her lap. The laptop screen displays the Lumina AI interface: dark navy background (#0A0A14), golden amber accents (#F5B041), camera aperture logo, Russian menu, grid of photoshoot scenarios, progress bar at 100%, 6 professional photos of the same woman in elegant milk-colored satin dress against draped fabric in golden frames. The screen glows with warm golden light illuminating her face. She looks at the screen with growing excitement and anticipation. Warm cozy atmosphere, fairy lights bokeh, fireplace glowing softly in background. 8k photorealistic, shallow depth of field.</code>
+      </div>
+    </div>
+
+    <div class="prompt-card reveal">
+      <div class="prompt-header">
+        <div class="prompt-number">4</div>
+        <div class="prompt-title">Счастье и триумф</div>
+        <div class="prompt-duration">2 секунды</div>
+      </div>
+      <div class="prompt-text">
+        <code>Cinematic close-up photography, cozy home interior evening. A young woman with chestnut brown hair in a messy bun, wearing a cream knit sweater, sitting on a sofa looking at an open laptop. Her face is illuminated by a warm golden glow from the screen. She has a wide, genuine, triumphant smile, looking extremely happy and satisfied with the professional portrait results on the display. Warm cozy atmosphere, soft fairy lights bokeh in the dark background. 8k photorealistic, shallow depth of field, joyful emotional moment.</code>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== ЗАМЕТКИ ========== -->
+<section id="notes" aria-labelledby="notes-title">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Заметки и выводы</span>
+      <h2 id="notes-title">Что я узнала <span class="gradient-text">в процессе работы</span></h2>
+      <p class="lead">Важные инсайты и наблюдения, которые помогут в будущих проектах.</p>
+    </div>
+
+    <div class="notes-grid">
+      <div class="note-card reveal">
+        <div class="note-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20"/></svg>
+        </div>
+        <h4>Image Guidance работает</h4>
+        <p>В Leonardo AI можно загрузить скриншот интерфейса и указать в промпте, чтобы визуал брался с изображения. Это критически важно для сохранения брендинга.</p>
+      </div>
+
+      <div class="note-card reveal">
+        <div class="note-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+        </div>
+        <h4>Следите за токенами</h4>
+        <p>При генерации видео в Leonardo AI токены расходуются быстро. У меня осталось только 86 токенов, поэтому получилось сделать только 5-секундное видео вместо 9.</p>
+      </div>
+
+      <div class="note-card reveal">
+        <div class="note-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <h4>ChatGPT справился отлично</h4>
+        <p>ChatGPT с DALL-E 3 создал 4 качественные картинки и гифки. Работал стабильно, без ошибок. Отличный инструмент для быстрой генерации.</p>
+      </div>
+
+      <div class="note-card reveal">
+        <div class="note-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        </div>
+        <h4>CapCut для монтажа</h4>
+        <p>Мобильная версия CapCut отлично подходит для быстрого монтажа. Загрузила гифки, добавила переходы, экспортировала — всё просто и быстро.</p>
+      </div>
+
+      <div class="note-card reveal">
+        <div class="note-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+        </div>
+        <h4>Разбивка на кадры</h4>
+        <p>Разбиение длинного промпта на 4 отдельных кадра дало лучший контроль над каждой сценой. Рекомендую этот подход для сложных роликов.</p>
+      </div>
+
+      <div class="note-card reveal">
+        <div class="note-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </div>
+        <h4>Нужна доработка</h4>
+        <p>Ролик из гиф-файлов нужно доработать для кинематографичности. Добавить плавные переходы, цветовую коррекцию, звуковое оформление.</p>
+      </div>
+    </div>
+
+    <div class="conclusions reveal" style="margin-top:64px">
+      <h3>Что нужно сделать дальше</h3>
+      <ul class="conclusions-list">
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          <span><b>Доработать ролик для кинематографичности</b>Добавить плавные переходы между кадрами, цветовую коррекцию в едином стиле, стабилизацию движения</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          <span><b>Вставить промпты в финальный ролик</b>Добавить текстовые титры с использованными промптами или сделать отдельную версию с субтитрами</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          <span><b>Добавить звуковое оформление</b>Музыка, звуковые эффекты (вздох, магический whoosh, хлопок в ладоши), голос за кадром</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          <span><b>Создать финальный кадр с логотипом</b>Добавить в конец ролика экран с логотипом Lumina AI и слоганом «Твой свет. Твои правила. Твоя фотосессия.»</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          <span><b>Попробовать Kling AI или Wan 3.0</b>Для более профессионального результата использовать специализированные видео-нейросети с Image-to-Video</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ========== FOOTER ========== -->
+<footer role="contentinfo">
+  <div class="footer-bottom">
+    <span>© 2026 Lumina AI. Все права защищены.</span>
+    <span>Процесс создания рекламного ролика</span>
+  </div>
+</footer>
+
+<script>
+/* ========== Intersection Observer: появление секций ========== */
+(function(){
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  },{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+})();
+
+/* ========== Навигация: тень при скролле ========== */
+(function(){
+  const nav = document.querySelector('.nav');
+  const onScroll = ()=>{
+    nav.style.background = window.scrollY>20 ? 'rgba(10,10,20,.85)' : 'rgba(10,10,20,.6)';
+  };
+  window.addEventListener('scroll',onScroll,{passive:true});
+  onScroll();
+})();
+</script>
+</body>
+</html>
